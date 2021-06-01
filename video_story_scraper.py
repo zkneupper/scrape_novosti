@@ -19,3 +19,8 @@ from urllib.request import urlretrieve
 import moviepy.editor
 import requests
 from bs4 import BeautifulSoup
+
+
+def _get_json_from_response(response):
+    return response.json() if response and response.status_code == 200 else None
+
