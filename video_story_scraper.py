@@ -187,9 +187,22 @@ class VideoStoryScraper:
             if i > 0:
                 time.sleep(60)
 
-    def download_data(self):
+    def _generate_mp3(self):
+        version_for_mp3 = self.video_version[-1]
+        filepath_video = self.filepaths_videos[version]
+        assert filepath_video.exists()
+
+        video = moviepy.editor.VideoFileClip(str(filepath_video))
+
+        self.filename_mp3 = "audio.mp3"
+        self.filepath_mp3 = self.data_store_leaf / "audio.mp3"
+        video.audio.write_audiofile(self.filepath_mp3)
+
+    def download_data(self, generate_mp3=True):
         print(f"Saving data to {self.data_store_leaf}")
         self._make_data_store_leaf()
         self._download_playlist_data()
         self._download_transcript()
         self._download_videos()
+        if generate_mp3:
+            self._generate_mp3()
